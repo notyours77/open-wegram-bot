@@ -87,7 +87,7 @@ export async function handleWebhook(request, ownerUid, botToken, secretToken) {
     const message = update.message;
     const reply = message.reply_to_message;
     try {
-        if (reply && message.chat.id.toString() === ownerUid) {
+    
             const rm = reply.reply_markup;
             if (rm && rm.inline_keyboard && rm.inline_keyboard.length > 0) {
                 let senderUid = rm.inline_keyboard[0][0].callback_data;
@@ -100,7 +100,7 @@ export async function handleWebhook(request, ownerUid, botToken, secretToken) {
                     from_chat_id: message.chat.id,
                     message_id: message.message_id
                 });
-            }
+            
 
             return new Response('OK');
         }
