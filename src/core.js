@@ -75,9 +75,6 @@ export async function handleUninstall(botToken, secretToken) {
 }
 
 export async function handleWebhook(request, ownerUid, botToken, secretToken) {
-    if (secretToken !== request.headers.get('X-Telegram-Bot-Api-Secret-Token')) {
-        return new Response('Unauthorized', {status: 401});
-    }
 
     const update = await request.json();
     if (!update.message) {
@@ -87,7 +84,7 @@ export async function handleWebhook(request, ownerUid, botToken, secretToken) {
     const message = update.message;
     const reply = message.reply_to_message;
     try {
-    
+    if (reply) {
             const rm = reply.reply_markup;
             if (rm && rm.inline_keyboard && rm.inline_keyboard.length > 0) {
                 let senderUid = rm.inline_keyboard[0][0].callback_data;
@@ -101,9 +98,8 @@ export async function handleWebhook(request, ownerUid, botToken, secretToken) {
                     message_id: message.message_id
                 });
             
-
-            return new Response('OK');
-        }
+            }
+            
 
         if ("/start" === message.text) {
             return new Response('OK');
